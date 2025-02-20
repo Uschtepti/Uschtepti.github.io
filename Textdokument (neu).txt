@@ -1,0 +1,12 @@
+verschidene charsets zur verdeutlichung
+
+random erraten
+
+mind 4
+max 12
+
+loggen an und aussschaltbar -> schneller, wenn auss
+
+
+timer
+
