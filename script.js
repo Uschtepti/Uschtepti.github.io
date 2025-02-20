@@ -1,5 +1,5 @@
-function changeContent(id) {
-    document.getElementById(id).textContent = inputValue;
+function changeContent(id, newContent) {
+    document.getElementById(id).textContent = newContent;
 }
 
 var stopState = false;
@@ -139,7 +139,6 @@ document.getElementById("myButton").addEventListener("click", async function() {
     }
 
 });
-
 
 document.getElementById("stop").addEventListener("click", function(){
     stopState = true;
