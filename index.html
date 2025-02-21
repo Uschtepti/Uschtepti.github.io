@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Basic Website</title>
+    <title>Passwort Cracker</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -11,22 +11,25 @@
         <h1>Passwort Cracker</h1>
     </header>
     <main>
-        <p>Deise Website versucht das eingegebene Passwort mithilfe verschiedener Methoden zu knacken</p>
-        <input type="text" id="myInput" placeholder="Dein Passwort">
-        <button id="myButton">Submit</button>
-        <select id="myDropdown">
-            <option value="" disabled selected>Select an option</option>
-            <option value="Brute_Force">Brute Force</option>
-            <option value="random">Random</option>
-            <option value="option3">Option 3</option>
-        </select>
-        <button id="stop" id="myButton">Stop</button>
+        <p>Diese Website versucht das eingegebene Passwort mithilfe verschiedener Methoden zu knacken</p>
+        <div class="input-group">
+            <input type="text" id="myInput" placeholder="Select an option first">
+            <select id="myDropdown">
+                <option value="" disabled selected>Select an option</option>
+                <option value="Brute_Force">Brute Force</option>
+                <option value="random">Random</option>
+                <option value="option3">Option 3</option>
+            </select>
+            <button id="myButton">Submit</button>
+            <button id="stop">Stop</button>
+        </div>
+        <p id="errorOutput"></p>
         <p id="output" onclick="changeContent('output', 'Neuer Inhalt')"></p>
         <h2>Console Output</h2>
         <div id="consoleOutput"></div>
     </main>
     <footer>
-        <p>&copy; 2023 My Basic Website</p>
+        <p>&copy; 2023 Passwort Cracker</p>
     </footer>
     <script src="script.js"></script>
 </body>

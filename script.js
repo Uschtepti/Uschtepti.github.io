@@ -4,17 +4,20 @@ var inputValue = ''; // Global variable
 
 async function generateRandomString() {
 	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?äöüÄÖÜß';
-	//const characters = 'abcdefghijklmnopqrstuvwxyz';
-	const length = Math.floor(Math.random() * (12 - 4 + 1)) + 4; // Zufällige Länge zwischen 4 und 12
-	//const length = 4;
+//const characters = 'abcdefghijklmnopqrstuvwxyz';
+//const characters = 'abcdefghijklmnopqrstuvwxyz';
+//const characters = 'abcdefghijklmnopqrstuvwxyz';
+	const length = Math.floor(Math.random() * (12 - 4 + 1)) + 4; // Zufällige Länge zwischen 4 und 1//const length = 4;
+2//const length = 4;
+
+//const length = 4;
 	let randomString = '';
 
 	for (let i = 0; i < length; i++) {
 		const randomIndex = Math.floor(Math.random() * characters.length);
 		randomString += characters[randomIndex];
 	}
-	var restult = randomString;
-	return restult;
+	return randomString;
 }
 
 // Store the original console.log function
@@ -38,15 +41,46 @@ console.log = function(message) {
 // Example usage
 console.log('Console is ready to capture messages.');
 
+// Update input attributes when dropdown changes
+document.getElementById('myDropdown').addEventListener('change', function() {
+    const selectedValue = this.value;
+    const inputField = document.getElementById('myInput');
+    if (selectedValue === 'Brute_Force') {
+        inputField.maxLength = 4;
+        inputField.placeholder = 'Enter exactly 4 characters';
+    } else if (selectedValue === 'random') {
+        inputField.maxLength = 12;
+        inputField.placeholder = 'Enter 4 to 12 characters';
+    }
+});
 
 document.getElementById("myButton").addEventListener("click", async function() {
 	stopState = false;
-	//Variablen Setup
+	// Variablen Setup
 	inputValue = document.getElementById("myInput").value;
-	document.getElementById("output").textContent = "Das Passwort wurde übernommen (Hovere über diesen Text um es dir anzeigen zu lassen)";
-
 	const dropdown = document.getElementById('myDropdown');
 	const selectedValue = dropdown.value;
+	
+	// Use errorOutput for error messages
+	const errorEl = document.getElementById("errorOutput");
+	errorEl.textContent = "";
+	errorEl.classList.remove('error');
+	
+	if (selectedValue === 'Brute_Force' && inputValue.length !== 4) {
+		errorEl.textContent = 'Please enter exactly 4 characters for Brute Force.';
+		errorEl.classList.add('error');
+		return;
+	}
+	if (selectedValue === 'random' && (inputValue.length < 4 || inputValue.length > 12)) {
+		errorEl.textContent = 'Please enter between 4 and 12 characters for Random.';
+		errorEl.classList.add('error');
+		return;
+	}
+	
+	// Set output confirmation message
+	const outputEl = document.getElementById("output");
+	outputEl.textContent = "Das Passwort wurde übernommen (Klicke, um dir dein eigegebenes Passwort anzeigen zu lassen)";
+	
 	console.log(selectedValue);
 	
 	const target = inputValue;

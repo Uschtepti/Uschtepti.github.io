@@ -91,3 +91,16 @@ select:hover {
     background-color: rgb(190, 39, 39);
 }
 
+/* New container style to keep input, dropdown, and buttons inline */
+.input-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.error {
+    color: red;
+    font-weight: bold;
+}
+
