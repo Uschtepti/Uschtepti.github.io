@@ -2,14 +2,14 @@ var stopState = false;
 var passwordShowing = false;
 var inputValue = ''; // Global variable
 
+// Global charset variable. Default set to German-order charset.
+var globalCharset = "abcdefghijklmnopqrstuvwxyzüöäß";
+
 async function generateRandomString() {
-	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?äöüÄÖÜß';
-	//const characters = 'abcdefghijklmnopqrstuvwxyz';
-
-	const length = Math.floor(Math.random() * (12 - 4 + 1)) + 4; // Zufällige Länge zwischen 4 und 1//const length = 4;
-	
+	// Use globalCharset as the characters set for random generation.
+	const characters = globalCharset;
+	const length = Math.floor(Math.random() * (12 - 4 + 1)) + 4;
 	let randomString = '';
-
 	for (let i = 0; i < length; i++) {
 		const randomIndex = Math.floor(Math.random() * characters.length);
 		randomString += characters[randomIndex];
@@ -22,7 +22,7 @@ const originalConsoleLog = console.log;
 
 // Create a function to capture console output
 console.log = function(message) {
-	// Call the original console.log function
+	// Call the originalConsole.log function
 	//originalConsoleLog(message);
 
 	// Get the console output div
@@ -37,6 +37,26 @@ console.log = function(message) {
 
 // Example usage
 console.log('Console is ready to capture messages.');
+
+// Listen for charset dropdown changes to update the globalCharset
+document.getElementById('charsetDropdown').addEventListener('change', function() {
+    const value = this.value;
+    if (value === 'german') {
+        globalCharset = "eainrstdhulcgmoßbfkvwpzäüöxyjq";
+    } else if (value === 'alphabetical') {
+        globalCharset = "abcdefghijklmnopqrstuvwxyz";
+    } else if (value === 'alternative') {
+        globalCharset = "abcdefghijklmnopqrstuvwxyzüöäß";
+    } else if (value === 'characters') {
+        globalCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?äöüÄÖÜß";
+    } else if (value === 'small_big_characters') {
+        globalCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzäöüÄÖÜß";
+    } else if (value === 'numbers_small_big_characters') {
+        globalCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789äöüÄÖÜß";
+    }
+
+    console.log("Charset updated to: " + globalCharset);
+});
 
 // Update input attributes when dropdown changes
 document.getElementById('myDropdown').addEventListener('change', function() {
@@ -92,10 +112,8 @@ document.getElementById("myButton").addEventListener("click", async function() {
 	console.log(selectedValue);
 	
 	const target = inputValue;
-	const charset = "eainrstdhulcgmoßbfkvwpzäüöxyjq".split('');
-	//const charset = "abcdefghijklmnopqrstuvwxyzüöäß".split('');
-	
-
+	// Use globalCharset as source, split into an array.
+	const charset = globalCharset.split('');
 	const maxLength = 12;
 
 	let attempts = 0;

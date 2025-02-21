@@ -7,6 +7,5 @@ max 12
 
 loggen an und aussschaltbar -> schneller, wenn auss
 
-
-timer
+Länge des passwortes
 
