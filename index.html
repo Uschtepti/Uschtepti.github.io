@@ -15,10 +15,17 @@
         <div class="input-group">
             <input type="text" id="myInput" placeholder="Select an option first">
             <select id="myDropdown">
-                <option value="" disabled selected>Select an option</option>
+                <option value="" disabled selected>Select a method</option>
                 <option value="Brute_Force">Brute Force</option>
                 <option value="random">Random</option>
                 <option value="option3">Option 3</option>
+            </select>
+            <!-- New dropdown for charset selection -->
+            <select id="charsetDropdown">
+                <option value="default" disabled selected>Select charset</option>
+                <option value="german">eainrstdhulcgmoßbfkvwpzäüöxyjq</option>
+                <option value="alphabetical">abcdefghijklmnopqrstuvwxyz</option>
+                <option value="alternative">abcdefghijklmnopqrstuvwxyzüöäß</option>
             </select>
             <button id="myButton">Submit</button>
             <button id="stop">Stop</button>
@@ -27,6 +34,7 @@
         <p id="output" onclick="changeContent('output', 'Neuer Inhalt')"></p>
         <h2>Console Output</h2>
         <div id="consoleOutput"></div>
+        <p id="timer"></p>
     </main>
     <footer>
         <p>&copy; 2023 Passwort Cracker</p>

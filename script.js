@@ -4,13 +4,10 @@ var inputValue = ''; // Global variable
 
 async function generateRandomString() {
 	const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+-=[]{}|;:,.<>?äöüÄÖÜß';
-//const characters = 'abcdefghijklmnopqrstuvwxyz';
-//const characters = 'abcdefghijklmnopqrstuvwxyz';
-//const characters = 'abcdefghijklmnopqrstuvwxyz';
-	const length = Math.floor(Math.random() * (12 - 4 + 1)) + 4; // Zufällige Länge zwischen 4 und 1//const length = 4;
-2//const length = 4;
+	//const characters = 'abcdefghijklmnopqrstuvwxyz';
 
-//const length = 4;
+	const length = Math.floor(Math.random() * (12 - 4 + 1)) + 4; // Zufällige Länge zwischen 4 und 1//const length = 4;
+	
 	let randomString = '';
 
 	for (let i = 0; i < length; i++) {
@@ -77,6 +74,17 @@ document.getElementById("myButton").addEventListener("click", async function() {
 		return;
 	}
 	
+	// Start real-time timer with minutes and seconds
+	const timerEl = document.getElementById("timer");
+	let startTime = Date.now();
+	if(window.timerInterval) clearInterval(window.timerInterval);
+	window.timerInterval = setInterval(() => {
+		const elapsed = (Date.now() - startTime) / 1000;
+		const minutes = Math.floor(elapsed / 60);
+		const seconds = (elapsed % 60).toFixed(2);
+		timerEl.textContent = "Timer: " + minutes + " minutes, " + seconds + " seconds";
+	}, 100);
+	
 	// Set output confirmation message
 	const outputEl = document.getElementById("output");
 	outputEl.textContent = "Das Passwort wurde übernommen (Klicke, um dir dein eigegebenes Passwort anzeigen zu lassen)";
@@ -84,7 +92,10 @@ document.getElementById("myButton").addEventListener("click", async function() {
 	console.log(selectedValue);
 	
 	const target = inputValue;
-	const charset = "abcdefghijklmnopqrstuvwxyz".split('');
+	const charset = "eainrstdhulcgmoßbfkvwpzäüöxyjq".split('');
+	//const charset = "abcdefghijklmnopqrstuvwxyzüöäß".split('');
+	
+
 	const maxLength = 12;
 
 	let attempts = 0;
@@ -122,6 +133,12 @@ document.getElementById("myButton").addEventListener("click", async function() {
 				if (current === target) {
 					console.log(`\nSUCCESS! Password found: "${current}"`);
 					found = true;
+					// Clear the timer and update the timer message with elapsed minutes and seconds.
+					clearInterval(window.timerInterval);
+					const elapsed = (Date.now() - startTime) / 1000;
+					const minutes = Math.floor(elapsed / 60);
+					const seconds = (elapsed % 60).toFixed(2);
+					timerEl.textContent = "Password was found in " + minutes + " minutes, " + seconds + " seconds after " + attempts + " attempts.";
 					break;
 				}
 				if(stopState == true){
@@ -163,6 +180,12 @@ document.getElementById("myButton").addEventListener("click", async function() {
 			if (randomString === inputValue) {
 					console.log(`\nSUCCESS! Password found: "${randomString}"`);
 					found = true;
+					// Clear timer and update message with elapsed minutes and seconds.
+					clearInterval(window.timerInterval);
+					const elapsed = (Date.now() - startTime) / 1000;
+					const minutes = Math.floor(elapsed / 60);
+					const seconds = (elapsed % 60).toFixed(2);
+					timerEl.textContent = "Password was found in " + minutes + " minutes, " + seconds + " seconds";
 					break;
 			}
 		
@@ -174,6 +197,7 @@ document.getElementById("myButton").addEventListener("click", async function() {
 
 document.getElementById("stop").addEventListener("click", function(){
 	stopState = true;
+	if(window.timerInterval) clearInterval(window.timerInterval);
 	console.log("\n Vorgang gestoppt.")
 });
 
