@@ -104,3 +104,14 @@ select:hover {
     font-weight: bold;
 }
 
+#timer {
+    font-size: 18px;
+    color: #35424a;
+    font-weight: bold;
+    margin-top: 10px;
+    background-color: #e0e0e0;
+    padding: 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+

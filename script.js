@@ -83,6 +83,13 @@ document.getElementById("myButton").addEventListener("click", async function() {
 	errorEl.textContent = "";
 	errorEl.classList.remove('error');
 	
+	// Prevent the user from starting without selecting a method.
+	if (!selectedValue || selectedValue === "default") {
+	    errorEl.textContent = "Please select a method.";
+	    errorEl.classList.add("error");
+	    return;
+	}
+	
 	if (selectedValue === 'Brute_Force' && inputValue.length !== 4) {
 		errorEl.textContent = 'Please enter exactly 4 characters for Brute Force.';
 		errorEl.classList.add('error');
@@ -226,7 +233,7 @@ function changeContent(id, newContent) {
 		passwordShowing = true;
 	}
 	else{
-		document.getElementById(id).textContent = "Das Passwort wurde übernommen (Hovere über diesen Text um es dir anzeigen zu lassen)";
+		document.getElementById(id).textContent = "Das Passwort wurde übernommen (Klicke, um dir dein eigegebenes Passwort anzeigen zu lassen)";
 		passwordShowing = false;
 	}
 }
