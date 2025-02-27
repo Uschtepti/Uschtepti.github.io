@@ -14,11 +14,17 @@
         <p>Diese Website versucht das eingegebene Passwort mithilfe verschiedener Methoden zu knacken</p>
         <div class="input-group">
             <input type="text" id="myInput" placeholder="Select an option first">
+<<<<<<< Updated upstream
             <select id="myDropdown">
                 <option value="" disabled selected>Select a method</option>
+=======
+            <input type="number" id="lengthInput" min="4" max="12" style="display: none;" placeholder="Optional: Set fixed length">
+            <select id="myDropdown" name="myDropdown">
+                <option value="default">Wähle eine Methode</option>
+>>>>>>> Stashed changes
                 <option value="Brute_Force">Brute Force</option>
                 <option value="random">Random</option>
-                <option value="option3">Option 3</option>
+                <option value="dictionary">Dictionary Attack</option>
             </select>
             <!-- New dropdown for charset selection -->
             <select id="charsetDropdown">

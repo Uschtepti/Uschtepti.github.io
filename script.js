@@ -62,12 +62,39 @@ document.getElementById('charsetDropdown').addEventListener('change', function()
 document.getElementById('myDropdown').addEventListener('change', function() {
     const selectedValue = this.value;
     const inputField = document.getElementById('myInput');
+<<<<<<< Updated upstream
     if (selectedValue === 'Brute_Force') {
         inputField.maxLength = 4;
         inputField.placeholder = 'Enter exactly 4 characters';
     } else if (selectedValue === 'random') {
         inputField.maxLength = 12;
         inputField.placeholder = 'Enter 4 to 12 characters';
+=======
+    const lengthInput = document.getElementById('lengthInput');
+    const charsetDropdown = document.getElementById('charsetDropdown');
+    
+    if (selectedValue === 'Brute_Force') {
+        inputField.maxLength = 4;
+        inputField.placeholder = 'Enter exactly 4 characters';
+        lengthInput.style.display = 'none';
+        charsetDropdown.disabled = false;
+    } else if (selectedValue === 'random') {
+        inputField.maxLength = 12;
+        inputField.placeholder = 'Enter 4 to 12 characters';
+        lengthInput.style.display = 'inline-block';
+        lengthInput.value = ''; // Clear the input
+        lengthInput.placeholder = 'Optional: Set fixed length';
+        charsetDropdown.disabled = false;
+    } else if (selectedValue === 'dictionary') {
+        inputField.maxLength = 20;
+        inputField.placeholder = 'Enter password to crack';
+        lengthInput.style.display = 'none';
+        charsetDropdown.value = 'numbers_small_big_characters';
+        charsetDropdown.disabled = true;
+        globalCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789äöüÄÖÜß";
+    } else {
+        lengthInput.style.display = 'none';
+>>>>>>> Stashed changes
     }
 });
 
@@ -217,6 +244,50 @@ document.getElementById("myButton").addEventListener("click", async function() {
 		}     
 			
 	}
+
+    if(selectedValue == 'dictionary'){
+        console.log("Starting dictionary attack...");
+        
+        try {
+            const response = await fetch('../passwords.json');
+            const data = await response.json();
+            const passwords = data.passwords;
+
+            for (let i = 0; i < passwords.length; i++) {
+                if (stopState) break;
+
+                const current = passwords[i];
+                attempts++;
+
+                if(attempts % 500 == 0){
+                    const consoleOutputDiv = document.getElementById('consoleOutput');
+                    consoleOutputDiv.innerHTML = '--- Console cleared ---<br>';
+                    consoleOutputDiv.scrollTop = consoleOutputDiv.scrollHeight;
+                }
+
+                logTry(`Attempt #${attempts}: Trying [${current}]`);
+                
+                await new Promise(resolve => setTimeout(resolve, 0));
+                
+                if (current === target) {
+                    logTry(`\nSUCCESS! Password found: [${current}]`);
+                    found = true;
+                    clearInterval(window.timerInterval);
+                    const elapsed = (Date.now() - startTime) / 1000;
+                    const minutes = Math.floor(elapsed / 60);
+                    const seconds = (elapsed % 60).toFixed(2);
+                    timerEl.textContent = "Password was found in " + minutes + " minutes, " + seconds + " seconds after " + attempts + " attempts.";
+                    break;
+                }
+            }
+
+            if (!found && !stopState) {
+                console.log("Password not found in dictionary.");
+            }
+        } catch (error) {
+            console.log("Error loading dictionary: " + error.message);
+        }
+    }
 
 });
 
