@@ -14,14 +14,13 @@
         <p>Diese Website versucht das eingegebene Passwort mithilfe verschiedener Methoden zu knacken</p>
         <div class="input-group">
             <input type="text" id="myInput" placeholder="Select an option first">
-            <input type="number" id="lengthInput" min="4" max="12" style="display: none;" placeholder="Optional: Set fixed length">
             <select id="myDropdown">
                 <option value="" disabled selected>Select a method</option>
                 <option value="Brute_Force">Brute Force</option>
                 <option value="random">Random</option>
                 <option value="option3">Option 3</option>
             </select>
-
+            <!-- New dropdown for charset selection -->
             <select id="charsetDropdown">
                 <option value="default" disabled selected>Select charset (Standart: Kleinbuchstaben alphabetisch)</option>
                 <option value="german">Kleinbuchstaben (sortiert)</option>
@@ -31,10 +30,8 @@
                 <option value="numbers_small_big_characters">Zahlen + Groß- und Kleinbuchstaben</option>
                 <option value="characters">Alle verfügbaren Zeichen</option>
             </select>
-
             <button id="myButton">Submit</button>
             <button id="stop">Stop</button>
-            <button id="loggingToggle" style="background-color: #45a049;">Logging: On</button>
         </div>
         <p id="errorOutput"></p>
         <p id="output" onclick="changeContent('output', 'Neuer Inhalt')"></p>
@@ -42,6 +39,9 @@
         <div id="consoleOutput"></div>
         <p id="timer"></p>
     </main>
+    <footer>
+        <p>&copy; 2023 Passwort Cracker</p>
+    </footer>
     <script src="script.js"></script>
 </body>
 </html>
