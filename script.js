@@ -66,6 +66,8 @@ document.getElementById('charsetDropdown').addEventListener('change', function()
         globalCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzäöüÄÖÜß";
     } else if (value === 'numbers_small_big_characters') {
         globalCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789äöüÄÖÜß";
+    } else if (value === 'numbers_small_characters') {
+        globalCharset = "abcdefghijklmnopqrstuvwxyz0123456789äöü";
     }
 
     console.log("Charset updated to: " + globalCharset + "<br>");
@@ -88,17 +90,30 @@ document.getElementById('myDropdown').addEventListener('change', function() {
     const selectedValue = this.value;
     const inputField = document.getElementById('myInput');
     const lengthInput = document.getElementById('lengthInput');
+    const charsetDropdown = document.getElementById('charsetDropdown');
     
     if (selectedValue === 'Brute_Force') {
         inputField.maxLength = 4;
         inputField.placeholder = 'Enter exactly 4 characters';
         lengthInput.style.display = 'none';
+        charsetDropdown.disabled = false;
     } else if (selectedValue === 'random') {
         inputField.maxLength = 12;
         inputField.placeholder = 'Enter 4 to 12 characters';
         lengthInput.style.display = 'inline-block';
         lengthInput.value = ''; // Clear the input
         lengthInput.placeholder = 'Optional: Set fixed length';
+        charsetDropdown.disabled = false;
+    } else if (selectedValue === 'dictionary') {
+        inputField.maxLength = 12;
+        inputField.placeholder = 'Enter password to find';
+        lengthInput.style.display = 'none';
+        // Force charset to numbers_small_characters
+        charsetDropdown.value = 'numbers_small_characters';
+        charsetDropdown.disabled = true;
+        // Trigger charset change event
+        const event = new Event('change');
+        charsetDropdown.dispatchEvent(event);
     } else {
         lengthInput.style.display = 'none';
     }
@@ -155,14 +170,7 @@ function validateCharset(password) {
 }
 
 document.getElementById("myButton").addEventListener("click", async function() {
-    // If there's already a process running, stop it first
-    if (!stopState) {
-        stopState = true;
-        console.log("Stopping current process before starting new one...<br>");
-        // Give the current process time to stop
-        await new Promise(resolve => setTimeout(resolve, 100));
-    }
-    
+    // Remove the stopping process part and just initialize
     stopState = false;
     inputValue = document.getElementById("myInput").value;
     const dropdown = document.getElementById('myDropdown');
@@ -221,8 +229,6 @@ document.getElementById("myButton").addEventListener("click", async function() {
     // Set output confirmation message
     const outputEl = document.getElementById("output");
     outputEl.textContent = "Das Passwort wurde übernommen (Klicke, um dir dein eigegebenes Passwort anzeigen zu lassen)";
-    
-    console.log(selectedValue);
     
     const target = inputValue;
     // Use globalCharset as source, split into an array.
@@ -324,6 +330,34 @@ document.getElementById("myButton").addEventListener("click", async function() {
             
     }
 
+    if (selectedValue === 'dictionary') {
+        try {
+            // Start timer first
+            const timerEl = document.getElementById("timer");
+            let startTime = Date.now();
+            if(window.timerInterval) clearInterval(window.timerInterval);
+            window.timerInterval = setInterval(() => {
+                const elapsed = (Date.now() - startTime) / 1000;
+                const minutes = Math.floor(elapsed / 60);
+                const seconds = (elapsed % 60).toFixed(2);
+                timerEl.textContent = "Timer: " + minutes + " minutes, " + seconds + " seconds";
+            }, 100);
+
+            const result = await dictionaryAttack(inputValue);
+            if (result.found) {
+                clearInterval(window.timerInterval);
+                const elapsed = (Date.now() - startTime) / 1000;
+                const minutes = Math.floor(elapsed / 60);
+                const seconds = (elapsed % 60).toFixed(2);
+                timerEl.textContent = `Password was found in ${minutes} minutes, ${seconds} seconds after ${result.attempts} attempts.`;
+            } else {
+                timerEl.textContent = `Password not found after ${result.attempts} attempts.`;
+            }
+        } catch (error) {
+            console.log("Error during dictionary attack: " + error.message);
+        }
+        return;
+    }
 });
 
 document.getElementById("stop").addEventListener("click", function(){
@@ -351,6 +385,59 @@ function logTry(message) {
         message = message.replace(/</g, '&lt;'); // Escape < for HTML
         message = message.replace(/>/g, '&gt;'); // Escape > for HTML
         console.log(message); // Don't add br tag here since it's part of the HTML template
+    }
+}
+
+async function dictionaryAttack(target) {
+    console.log("Starting dictionary attack...");
+    let attempts = 0;
+    
+    try {
+        // Use relative path and ensure file exists
+        const response = await fetch('./passwords.txt');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+        
+        const text = await response.text();
+        const passwords = text.split('\n').filter(pwd => pwd.trim());
+        
+        if (passwords.length === 0) {
+            throw new Error('No passwords loaded from file');
+        }
+        
+        console.log(`Loaded ${passwords.length} passwords from file`);
+        
+        for (let password of passwords) {
+            password = password.trim();
+            attempts++;
+            
+            if (attempts % 500 === 0) {
+                console.clear();
+                const consoleOutputDiv = document.getElementById('consoleOutput');
+                consoleOutputDiv.innerHTML = '--- Console cleared ---<br>';
+            }
+            
+            logTry(`Attempt #${attempts}: Trying [${password}]`);
+            
+            // Check for match
+            if (password === target) {
+                logTry(`\nSUCCESS! Password found: [${password}]`);
+                return { found: true, attempts };
+            }
+            
+            if (stopState) {
+                return { found: false, attempts };
+            }
+            
+            // Prevent UI freezing
+            await new Promise(resolve => setTimeout(resolve, 0));
+        }
+        
+        return { found: false, attempts };
+    } catch (error) {
+        console.log("Failed to load password file: " + error.message);
+                throw error; // Re-throw to be caught by the caller
     }
 }
 
