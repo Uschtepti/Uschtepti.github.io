@@ -1,5 +1,0 @@
-loggen an und aussschaltbar -> schneller, wenn auss
-
-Länge des passwortes
-
-timer verschönern
