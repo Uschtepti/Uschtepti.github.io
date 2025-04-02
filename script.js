@@ -66,7 +66,11 @@ document.getElementById('charsetDropdown').addEventListener('change', function()
         globalCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyzäöüÄÖÜß";
     } else if (value === 'numbers_small_big_characters') {
         globalCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789äöüÄÖÜß";
-    }
+    } else if (value === 'numbers') {
+        globalCharset = "0123456789";
+    } else if (value === 'big_characters') {
+        globalCharset = "ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÜ";
+    }  // Added missing closing brace
 
     console.log("Charset updated to: " + globalCharset + "<br>");
     
